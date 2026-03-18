@@ -126,8 +126,13 @@ struct ScreenshotDocument: FileDocument {
     init(configuration: ReadConfiguration) throws { fatalError("read not supported") }
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        // fileWrapper is called on the main thread by SwiftUI's fileExporter.
+        // Screenshot is @MainActor so we use assumeIsolated to satisfy the compiler.
+        let image = MainActor.assumeIsolated {
+            screenshot.styledImage ?? screenshot.renderSync()
+        }
         guard
-            let image = screenshot.styledImage,
+            let image,
             let data = NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])
         else { throw ExportError.renderFailed }
         return FileWrapper(regularFileWithContents: data)

@@ -4,27 +4,44 @@ import SwiftUI
 
 /// Represents a captured screenshot along with its styling configuration.
 @Observable
+@MainActor
 final class Screenshot {
     let originalImage: CGImage
     var style: ScreenshotStyle {
-        didSet {
-            if style != oldValue { _cachedStyled = nil }
-        }
+        didSet { if style != oldValue { scheduleRender() } }
     }
 
-    private var _cachedStyled: CGImage?
+    /// Latest rendered output. Nil only during the very first render.
+    /// While a new render is in flight the previous image stays visible — no blank flash.
+    private(set) var styledImage: CGImage?
+
+    private var renderTask: Task<Void, Never>?
 
     init(image: CGImage, style: ScreenshotStyle = .default) {
         self.originalImage = image
         self.style = style
+        scheduleRender()
     }
 
-    /// The styled image — recomputed only when `style` changes.
-    var styledImage: CGImage? {
-        if let cached = _cachedStyled { return cached }
-        let result = ImageStyler.apply(style, to: originalImage)
-        _cachedStyled = result
-        return result
+    /// Synchronous render used by the export path (file save / clipboard).
+    func renderSync() -> CGImage? {
+        ImageStyler.apply(style, to: originalImage)
+    }
+
+    // MARK: - Private
+
+    private func scheduleRender() {
+        renderTask?.cancel()
+        let img = originalImage
+        let sty = style
+        // Keep the MainActor free while the heavy CGContext work runs on a background thread.
+        renderTask = Task { [weak self] in
+            let result = await Task.detached(priority: .userInitiated) {
+                ImageStyler.apply(sty, to: img)
+            }.value
+            guard !Task.isCancelled else { return }
+            self?.styledImage = result
+        }
     }
 }
 
