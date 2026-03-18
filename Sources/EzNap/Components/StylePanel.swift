@@ -14,7 +14,10 @@ struct StylePanel: View {
             }
             .padding(20)
         }
-        .background(.regularMaterial)
+        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .overlay(alignment: .leading) {
+            Divider()
+        }
         .frame(maxHeight: .infinity)
     }
 
@@ -118,22 +121,25 @@ struct StylePanel: View {
     // MARK: - Helpers
 
     private func sectionHeader(_ title: String) -> some View {
-        Text(title)
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(.secondary)
+        Text(title.uppercased())
+            .font(.system(size: 10, weight: .semibold))
+            .foregroundStyle(Color(red: 0.10, green: 0.10, blue: 0.12).opacity(0.35))
+            .tracking(0.8)
     }
 
     private func sliderRow(_ label: String, value: Binding<CGFloat>, range: ClosedRange<CGFloat>, unit: String, scale: CGFloat = 1) -> some View {
         VStack(spacing: 4) {
             HStack {
-                Text(label).font(.caption).foregroundStyle(.secondary)
+                Text(label)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color(red: 0.10, green: 0.10, blue: 0.12).opacity(0.65))
                 Spacer()
                 Text("\(Int(value.wrappedValue * scale))\(unit)")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 12).monospacedDigit())
+                    .foregroundStyle(Color(red: 0.10, green: 0.10, blue: 0.12).opacity(0.40))
             }
             Slider(value: value, in: range)
-                .tint(.white.opacity(0.8))
+                .tint(Color(red: 0.25, green: 0.47, blue: 0.98))
         }
     }
 }

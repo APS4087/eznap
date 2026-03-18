@@ -62,15 +62,18 @@ struct EditorView: View {
 
     private var canvasArea: some View {
         ZStack {
-            // Checkerboard to indicate transparency when bg is .transparent
+            // Warm light canvas — matches home screen aesthetic
+            Color(red: 0.93, green: 0.92, blue: 0.90)
+                .ignoresSafeArea()
+
             CheckerboardBackground()
 
             if let styled = screenshot.styledImage {
                 Image(decorative: styled, scale: 2)
                     .resizable()
                     .scaledToFit()
-                    .shadow(radius: 24, y: 8)
-                    .padding(32)
+                    .shadow(color: .black.opacity(0.18), radius: 32, x: 0, y: 12)
+                    .padding(40)
             }
 
             // Annotation toolbar pinned to bottom of canvas
@@ -80,7 +83,6 @@ struct EditorView: View {
                     .padding(.bottom, 20)
             }
         }
-        .background(Color(red: 0.10, green: 0.10, blue: 0.14))
     }
 }
 
@@ -97,7 +99,7 @@ private struct CheckerboardBackground: View {
                     let isLight = (row + col) % 2 == 0
                     ctx.fill(
                         Path(CGRect(x: CGFloat(col) * tileSize, y: CGFloat(row) * tileSize, width: tileSize, height: tileSize)),
-                        with: .color(isLight ? Color(white: 0.18) : Color(white: 0.14))
+                        with: .color(isLight ? Color(white: 0.86) : Color(white: 0.82))
                     )
                 }
             }
