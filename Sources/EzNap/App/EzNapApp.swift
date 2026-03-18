@@ -8,6 +8,9 @@ struct EzNapApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                    appState.recheckPermission()
+                }
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.automatic)

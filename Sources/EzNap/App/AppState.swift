@@ -8,9 +8,28 @@ final class AppState {
     var screenshot: Screenshot?
     var isCapturing = false
     var captureError: String?
+    var hasScreenPermission: Bool = false
 
     private let captureService = ScreenCaptureService()
     private let exportService = ImageExportService()
+
+    init() {
+        hasScreenPermission = captureService.hasPermission
+    }
+
+    func requestScreenPermission() {
+        hasScreenPermission = captureService.requestPermission()
+        // If still denied after request, the user needs System Settings
+    }
+
+    func openPrivacySettings() {
+        captureService.openPrivacySettings()
+    }
+
+    /// Call when app becomes active — re-checks in case user toggled in System Settings
+    func recheckPermission() {
+        hasScreenPermission = captureService.hasPermission
+    }
 
     // MARK: - Capture
 
