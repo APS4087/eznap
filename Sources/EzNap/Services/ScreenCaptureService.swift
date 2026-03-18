@@ -32,7 +32,8 @@ final class ScreenCaptureService: Sendable {
         guard hasPermission else { throw CaptureError.permissionDenied }
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
         guard let display = content.displays.first else { throw CaptureError.noDisplayFound }
-        let filter = SCContentFilter(display: display, excludingWindows: [])
+        let ownWindows = content.windows.filter { $0.owningApplication?.bundleIdentifier == "com.eznap.app" }
+        let filter = SCContentFilter(display: display, excludingWindows: ownWindows)
         return try await capture(filter: filter, size: CGSize(width: display.width, height: display.height))
     }
 
@@ -76,12 +77,13 @@ final class ScreenCaptureService: Sendable {
         return try await capture(filter: filter, size: size)
     }
 
-    /// Captures a rect (AppKit screen coordinates, origin bottom-left) on the main display.
+    /// Captures a rect on the main display, excluding the EzNap window.
     func captureRegion(_ rect: CGRect) async throws -> CGImage {
         guard hasPermission else { throw CaptureError.permissionDenied }
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
         guard let display = content.displays.first else { throw CaptureError.noDisplayFound }
-        let filter = SCContentFilter(display: display, excludingWindows: [])
+        let ownWindows = content.windows.filter { $0.owningApplication?.bundleIdentifier == "com.eznap.app" }
+        let filter = SCContentFilter(display: display, excludingWindows: ownWindows)
         let config = SCStreamConfiguration()
         // SwiftUI and SCKit both use top-left origin in points — pass rect directly
         config.sourceRect = rect

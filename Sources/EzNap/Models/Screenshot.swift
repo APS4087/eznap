@@ -34,8 +34,11 @@ final class Screenshot {
         renderTask?.cancel()
         let img = originalImage
         let sty = style
-        // Keep the MainActor free while the heavy CGContext work runs on a background thread.
         renderTask = Task { [weak self] in
+            // Debounce: if style changes again within 80 ms (e.g. fast slider drag),
+            // this task gets cancelled before the expensive render ever starts.
+            try? await Task.sleep(for: .milliseconds(80))
+            guard !Task.isCancelled else { return }
             let result = await Task.detached(priority: .userInitiated) {
                 ImageStyler.apply(sty, to: img)
             }.value
