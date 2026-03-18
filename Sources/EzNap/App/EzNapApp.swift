@@ -24,7 +24,7 @@ struct EzNapApp: App {
                 .keyboardShortcut("3", modifiers: [.command, .shift])
 
                 Button("Capture Window") {
-                    Task { await appState.captureWindow() }
+                    appState.initiateWindowCapture()
                 }
                 .keyboardShortcut("4", modifiers: [.command, .shift])
 

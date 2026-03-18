@@ -9,9 +9,11 @@ final class AppState {
     var isCapturing = false
     var captureError: String?
     var hasScreenPermission: Bool = false
+    var showWindowPicker = false
 
     private let captureService = ScreenCaptureService()
     private let exportService = ImageExportService()
+    private let regionSelector = RegionSelectorService()
 
     init() {
         hasScreenPermission = captureService.hasPermission
@@ -39,15 +41,28 @@ final class AppState {
         }
     }
 
-    func captureWindow() async {
+    /// Shows the window picker sheet — user selects which window to capture.
+    func initiateWindowCapture() {
+        showWindowPicker = true
+    }
+
+    /// Called from WindowPickerView after user selects a window.
+    func captureSpecificWindow(id windowID: CGWindowID) async {
         await performCapture { [captureService] in
-            try await captureService.captureWindow()
+            try await captureService.captureWindow(id: windowID)
         }
     }
 
+    /// Fetches window list for the picker.
+    func fetchWindows() async throws -> [WindowInfo] {
+        try await captureService.fetchWindows()
+    }
+
+    /// Shows full-screen region selector overlay, then captures the selection.
     func captureRegion() async {
+        guard let rect = await regionSelector.selectRegion() else { return }
         await performCapture { [captureService] in
-            try await captureService.captureRegion()
+            try await captureService.captureRegion(rect)
         }
     }
 

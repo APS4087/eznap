@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01CA2723E2D1830FB59BF0E1 /* WindowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD617B4A1D63812CC6C730D /* WindowInfo.swift */; };
 		0CA4C4DD599C1C579C00AE73 /* EzNapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59B4AED08E67A2CFB0D18B2 /* EzNapApp.swift */; };
 		2681FB9181695FC9409066D1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AA1B538D5A9A9B0EF02B7 /* ContentView.swift */; };
 		2C4FC4CB2B404356138E85E9 /* Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03B7EDDEA34107F9FA2AC04 /* Screenshot.swift */; };
@@ -15,9 +16,11 @@
 		39E42942CEED4FF53250D47A /* AnnotationToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77A1C0B4D6D8387F8606C4 /* AnnotationToolbar.swift */; };
 		3F1CC2835195250436A3E15A /* StylePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D448423CE0BE382D35A8CD3A /* StylePanel.swift */; };
 		78603EC24C4067543B2E8C97 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF588B6A5129BF8C54CD30A /* AppState.swift */; };
+		88303FEC50FFCE16C948E1BC /* RegionSelectorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61735666E79495C56127298D /* RegionSelectorService.swift */; };
 		8B00DDEDFE6569041268052B /* CaptureHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9343BA6C10AC7339BFAF1C69 /* CaptureHomeView.swift */; };
 		8CD5441EB0DDF8B343D7FC1B /* ImageExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F029A106BD3C2628F455FC06 /* ImageExportService.swift */; };
 		9B96860EEFB5D90F98298BE2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5BC88A8F7568BB4BC1B1B6 /* SettingsView.swift */; };
+		F0DECDD433F700DC58ED2563 /* WindowPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CDB287314AE4A52E821B7 /* WindowPickerView.swift */; };
 		F6376D43DAF539758348FC53 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A97AB5AC3888FC4A95E56 /* EditorView.swift */; };
 		FD4B4A8B4C4FFDA2CEF99D6E /* ImageStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC69F30F955BA244A64AC6 /* ImageStyler.swift */; };
 /* End PBXBuildFile section */
@@ -27,8 +30,11 @@
 		2EDC69F30F955BA244A64AC6 /* ImageStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStyler.swift; sourceTree = "<group>"; };
 		32FE0B6989DB52C1430347B1 /* AnnotationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationTool.swift; sourceTree = "<group>"; };
 		400A97AB5AC3888FC4A95E56 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		61735666E79495C56127298D /* RegionSelectorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionSelectorService.swift; sourceTree = "<group>"; };
 		9343BA6C10AC7339BFAF1C69 /* CaptureHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureHomeView.swift; sourceTree = "<group>"; };
+		959CDB287314AE4A52E821B7 /* WindowPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPickerView.swift; sourceTree = "<group>"; };
 		9EF588B6A5129BF8C54CD30A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		AAD617B4A1D63812CC6C730D /* WindowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInfo.swift; sourceTree = "<group>"; };
 		ABDD34614BEC31B311EE118E /* ScreenCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureService.swift; sourceTree = "<group>"; };
 		C03B7EDDEA34107F9FA2AC04 /* Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screenshot.swift; sourceTree = "<group>"; };
 		C74AA1B538D5A9A9B0EF02B7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,6 +67,7 @@
 			children = (
 				32FE0B6989DB52C1430347B1 /* AnnotationTool.swift */,
 				C03B7EDDEA34107F9FA2AC04 /* Screenshot.swift */,
+				AAD617B4A1D63812CC6C730D /* WindowInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -70,6 +77,7 @@
 			children = (
 				F029A106BD3C2628F455FC06 /* ImageExportService.swift */,
 				2EDC69F30F955BA244A64AC6 /* ImageStyler.swift */,
+				61735666E79495C56127298D /* RegionSelectorService.swift */,
 				ABDD34614BEC31B311EE118E /* ScreenCaptureService.swift */,
 			);
 			path = Services;
@@ -91,6 +99,7 @@
 				C74AA1B538D5A9A9B0EF02B7 /* ContentView.swift */,
 				400A97AB5AC3888FC4A95E56 /* EditorView.swift */,
 				DE5BC88A8F7568BB4BC1B1B6 /* SettingsView.swift */,
+				959CDB287314AE4A52E821B7 /* WindowPickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -207,10 +216,13 @@
 				0CA4C4DD599C1C579C00AE73 /* EzNapApp.swift in Sources */,
 				8CD5441EB0DDF8B343D7FC1B /* ImageExportService.swift in Sources */,
 				FD4B4A8B4C4FFDA2CEF99D6E /* ImageStyler.swift in Sources */,
+				88303FEC50FFCE16C948E1BC /* RegionSelectorService.swift in Sources */,
 				37ABCCA22DF38FC891DEAFC2 /* ScreenCaptureService.swift in Sources */,
 				2C4FC4CB2B404356138E85E9 /* Screenshot.swift in Sources */,
 				9B96860EEFB5D90F98298BE2 /* SettingsView.swift in Sources */,
 				3F1CC2835195250436A3E15A /* StylePanel.swift in Sources */,
+				01CA2723E2D1830FB59BF0E1 /* WindowInfo.swift in Sources */,
+				F0DECDD433F700DC58ED2563 /* WindowPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

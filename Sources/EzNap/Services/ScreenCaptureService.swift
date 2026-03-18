@@ -36,20 +36,61 @@ final class ScreenCaptureService: Sendable {
         return try await capture(filter: filter, size: CGSize(width: display.width, height: display.height))
     }
 
-    func captureWindow() async throws -> CGImage {
+    /// Fetches all capturable on-screen windows with thumbnails via ScreenCaptureKit.
+    func fetchWindows() async throws -> [WindowInfo] {
         guard hasPermission else { throw CaptureError.permissionDenied }
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
-        guard let window = content.windows.first(where: {
-            $0.isOnScreen && $0.owningApplication?.bundleIdentifier != "com.eznap.app"
-        }) else { throw CaptureError.noWindowFound }
+        let eligible = content.windows.filter {
+            $0.isOnScreen && $0.frame.width > 100 && $0.owningApplication?.bundleIdentifier != "com.eznap.app"
+        }
+        // Capture thumbnails sequentially — avoids sending non-Sendable SCWindow across task boundaries
+        var results: [WindowInfo] = []
+        for window in eligible {
+            let filter = SCContentFilter(desktopIndependentWindow: window)
+            let config = SCStreamConfiguration()
+            config.width = 400
+            config.height = 300
+            config.scalesToFit = true
+            config.showsCursor = false
+            let thumb = try? await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+            results.append(WindowInfo(
+                id: window.windowID,
+                appName: window.owningApplication?.applicationName ?? "Unknown",
+                windowTitle: window.title ?? "",
+                frame: window.frame,
+                thumbnail: thumb
+            ))
+        }
+        return results
+    }
+
+    /// Captures a specific window by its ID.
+    func captureWindow(id windowID: CGWindowID) async throws -> CGImage {
+        guard hasPermission else { throw CaptureError.permissionDenied }
+        let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+        guard let window = content.windows.first(where: { $0.windowID == windowID }) else {
+            throw CaptureError.noWindowFound
+        }
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let size = CGSize(width: window.frame.width, height: window.frame.height)
         return try await capture(filter: filter, size: size)
     }
 
-    func captureRegion() async throws -> CGImage {
-        // TODO: interactive region selection (Phase 2)
-        return try await captureScreen()
+    /// Captures a rect (AppKit screen coordinates, origin bottom-left) on the main display.
+    func captureRegion(_ rect: CGRect) async throws -> CGImage {
+        guard hasPermission else { throw CaptureError.permissionDenied }
+        let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+        guard let display = content.displays.first else { throw CaptureError.noDisplayFound }
+        let filter = SCContentFilter(display: display, excludingWindows: [])
+        let config = SCStreamConfiguration()
+        // SCKit uses top-left origin; AppKit uses bottom-left — flip Y
+        let screenH = CGFloat(display.height)
+        config.sourceRect = CGRect(x: rect.minX, y: screenH - rect.maxY, width: rect.width, height: rect.height)
+        config.width = Int(rect.width * 2)
+        config.height = Int(rect.height * 2)
+        config.scalesToFit = false
+        config.showsCursor = false
+        return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
     }
 
     // MARK: - Private

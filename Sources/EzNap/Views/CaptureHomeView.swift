@@ -12,11 +12,19 @@ struct CaptureHomeView: View {
         .frame(minWidth: 760, minHeight: 500)
         .overlay(alignment: .center) {
             if appState.isCapturing {
-                ProgressView()
-                    .controlSize(.large)
-                    .padding(28)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+                VStack(spacing: 10) {
+                    ProgressView().controlSize(.regular)
+                    Text("Capturing…")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                .padding(24)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
             }
+        }
+        .sheet(isPresented: Bindable(appState).showWindowPicker) {
+            WindowPickerView(isPresented: Bindable(appState).showWindowPicker)
+                .environment(appState)
         }
     }
 
@@ -110,15 +118,15 @@ struct CaptureHomeView: View {
 
             captureCard(
                 title: "Window",
-                subtitle: "Active window",
+                subtitle: "Pick a window",
                 icon: "macwindow",
                 accent: Color(red: 0.55, green: 0.35, blue: 0.92)
-            ) { Task { await appState.captureWindow() } }
+            ) { appState.initiateWindowCapture() }
             .glassEffectID("window", in: glassNamespace)
 
             captureCard(
                 title: "Region",
-                subtitle: "Select area",
+                subtitle: "Drag to select",
                 icon: "crop",
                 accent: Color(red: 0.95, green: 0.42, blue: 0.32)
             ) { Task { await appState.captureRegion() } }
