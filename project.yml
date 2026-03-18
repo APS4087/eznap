@@ -1,0 +1,37 @@
+name: eznap
+options:
+  bundleIdPrefix: com.eznap
+  deploymentTarget:
+    macOS: "26.0"
+  xcodeVersion: "26.0"
+  swift: "6.0"
+
+settings:
+  PRODUCT_BUNDLE_IDENTIFIER: com.eznap.app
+  MARKETING_VERSION: "0.1.0"
+  CURRENT_PROJECT_VERSION: "1"
+  SWIFT_VERSION: "6.0"
+  MACOSX_DEPLOYMENT_TARGET: "26.0"
+  ENABLE_HARDENED_RUNTIME: YES
+  CODE_SIGN_STYLE: Automatic
+
+targets:
+  EzNap:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/EzNap
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      PRODUCT_NAME: EzNap
+      INFOPLIST_FILE: SupportingFiles/Info.plist
+      CODE_SIGN_ENTITLEMENTS: SupportingFiles/EzNap.entitlements
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    preBuildScripts:
+      - name: SwiftLint
+        script: |
+          if which swiftlint > /dev/null; then
+            swiftlint
+          fi
+        basedOnDependencyAnalysis: false
