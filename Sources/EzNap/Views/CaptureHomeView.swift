@@ -96,9 +96,9 @@ struct CaptureHomeView: View {
 
             // Subtle keyboard hints
             HStack(spacing: 20) {
-                shortcutHint(key: "⇧⌘3", label: "Screen")
-                shortcutHint(key: "⇧⌘4", label: "Window")
-                shortcutHint(key: "⇧⌘5", label: "Region")
+                shortcutHint(key: "⌘1", label: "Screen")
+                shortcutHint(key: "⌘2", label: "Window")
+                shortcutHint(key: "⌘3", label: "Region")
             }
             .padding(.bottom, 28)
         }

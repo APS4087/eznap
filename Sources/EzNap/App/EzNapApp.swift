@@ -21,17 +21,17 @@ struct EzNapApp: App {
                 Button("Capture Screen") {
                     Task { await appState.captureScreen() }
                 }
-                .keyboardShortcut("3", modifiers: [.command, .shift])
+                .keyboardShortcut("1", modifiers: [.command])
 
                 Button("Capture Window") {
                     appState.initiateWindowCapture()
                 }
-                .keyboardShortcut("4", modifiers: [.command, .shift])
+                .keyboardShortcut("2", modifiers: [.command])
 
                 Button("Capture Region") {
                     Task { await appState.captureRegion() }
                 }
-                .keyboardShortcut("5", modifiers: [.command, .shift])
+                .keyboardShortcut("3", modifiers: [.command])
             }
         }
 
