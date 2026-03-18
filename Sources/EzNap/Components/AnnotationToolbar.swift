@@ -8,6 +8,7 @@ struct AnnotationToolbar: View {
 
     var body: some View {
         GlassEffectContainer(spacing: 4) {
+            HStack(spacing: 4) {
             ForEach(AnnotationTool.allCases) { tool in
                 Button {
                     withAnimation(.spring(duration: 0.3, bounce: 0.2)) {
@@ -27,6 +28,7 @@ struct AnnotationToolbar: View {
                 )
                 .accessibilityLabel(tool.rawValue)
             }
+            } // HStack
         }
     }
 }

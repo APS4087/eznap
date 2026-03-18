@@ -77,34 +77,40 @@ struct EditorView: View {
                         .padding(40)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity) // canvas takes all remaining height
 
-            // Annotation toolbar sits below the canvas — never overlaps image
+            // Annotation toolbar — natural height only, never expands
             AnnotationToolbar(selectedTool: $selectedTool)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
                 .background(Color(red: 0.93, green: 0.92, blue: 0.90))
         }
     }
 }
 
 // MARK: - Checkerboard
+// Uses a static 24×24 NSImage tiled via ImagePaint — zero per-frame CPU cost.
 
 private struct CheckerboardBackground: View {
-    var body: some View {
-        Canvas { ctx, size in
-            let tileSize: CGFloat = 12
-            let cols = Int(size.width / tileSize) + 1
-            let rows = Int(size.height / tileSize) + 1
-            for row in 0..<rows {
-                for col in 0..<cols {
-                    let isLight = (row + col) % 2 == 0
-                    ctx.fill(
-                        Path(CGRect(x: CGFloat(col) * tileSize, y: CGFloat(row) * tileSize, width: tileSize, height: tileSize)),
-                        with: .color(isLight ? Color(white: 0.86) : Color(white: 0.82))
-                    )
-                }
-            }
+    private static let tile: Image = {
+        let size = CGSize(width: 24, height: 24)
+        let img = NSImage(size: size, flipped: false) { _ in
+            NSColor(white: 0.86, alpha: 0.6).setFill()
+            NSBezierPath(rect: NSRect(x: 0,  y: 0,  width: 12, height: 12)).fill()
+            NSBezierPath(rect: NSRect(x: 12, y: 12, width: 12, height: 12)).fill()
+            NSColor(white: 0.82, alpha: 0.6).setFill()
+            NSBezierPath(rect: NSRect(x: 12, y: 0,  width: 12, height: 12)).fill()
+            NSBezierPath(rect: NSRect(x: 0,  y: 12, width: 12, height: 12)).fill()
+            return true
         }
-        .opacity(0.6)
+        return Image(nsImage: img)
+    }()
+
+    var body: some View {
+        Rectangle()
+            .fill(ImagePaint(image: Self.tile))
+            .ignoresSafeArea()
     }
 }
 
