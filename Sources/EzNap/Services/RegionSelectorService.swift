@@ -33,6 +33,7 @@ final class RegionOverlayWindow: NSWindow {
         let screen = NSScreen.main ?? NSScreen.screens[0]
         super.init(contentRect: screen.frame, styleMask: .borderless, backing: .buffered, defer: false)
         self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.screenSaverWindow)))
+        self.isReleasedWhenClosed = false   // ARC manages lifetime; prevent double-free on close()
         self.isOpaque = false
         self.backgroundColor = .clear
         self.ignoresMouseEvents = false
