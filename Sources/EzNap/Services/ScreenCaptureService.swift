@@ -83,9 +83,8 @@ final class ScreenCaptureService: Sendable {
         guard let display = content.displays.first else { throw CaptureError.noDisplayFound }
         let filter = SCContentFilter(display: display, excludingWindows: [])
         let config = SCStreamConfiguration()
-        // SCKit uses top-left origin; AppKit uses bottom-left — flip Y
-        let screenH = CGFloat(display.height)
-        config.sourceRect = CGRect(x: rect.minX, y: screenH - rect.maxY, width: rect.width, height: rect.height)
+        // SwiftUI and SCKit both use top-left origin in points — pass rect directly
+        config.sourceRect = rect
         config.width = Int(rect.width * 2)
         config.height = Int(rect.height * 2)
         config.scalesToFit = false

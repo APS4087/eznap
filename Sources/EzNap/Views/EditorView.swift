@@ -61,27 +61,27 @@ struct EditorView: View {
     // MARK: - Canvas
 
     private var canvasArea: some View {
-        ZStack {
-            // Warm light canvas — matches home screen aesthetic
-            Color(red: 0.93, green: 0.92, blue: 0.90)
-                .ignoresSafeArea()
+        VStack(spacing: 0) {
+            ZStack {
+                // Warm light canvas — matches home screen aesthetic
+                Color(red: 0.93, green: 0.92, blue: 0.90)
+                    .ignoresSafeArea()
 
-            CheckerboardBackground()
+                CheckerboardBackground()
 
-            if let styled = screenshot.styledImage {
-                Image(decorative: styled, scale: 2)
-                    .resizable()
-                    .scaledToFit()
-                    .shadow(color: .black.opacity(0.18), radius: 32, x: 0, y: 12)
-                    .padding(40)
+                if let styled = screenshot.styledImage {
+                    Image(decorative: styled, scale: 2)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .black.opacity(0.18), radius: 32, x: 0, y: 12)
+                        .padding(40)
+                }
             }
 
-            // Annotation toolbar pinned to bottom of canvas
-            VStack {
-                Spacer()
-                AnnotationToolbar(selectedTool: $selectedTool)
-                    .padding(.bottom, 20)
-            }
+            // Annotation toolbar sits below the canvas — never overlaps image
+            AnnotationToolbar(selectedTool: $selectedTool)
+                .padding(.vertical, 12)
+                .background(Color(red: 0.93, green: 0.92, blue: 0.90))
         }
     }
 }

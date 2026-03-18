@@ -6,16 +6,25 @@ import SwiftUI
 @Observable
 final class Screenshot {
     let originalImage: CGImage
-    var style: ScreenshotStyle
+    var style: ScreenshotStyle {
+        didSet {
+            if style != oldValue { _cachedStyled = nil }
+        }
+    }
+
+    private var _cachedStyled: CGImage?
 
     init(image: CGImage, style: ScreenshotStyle = .default) {
         self.originalImage = image
         self.style = style
     }
 
-    /// The styled image, ready for display or export.
+    /// The styled image — recomputed only when `style` changes.
     var styledImage: CGImage? {
-        ImageStyler.apply(style, to: originalImage)
+        if let cached = _cachedStyled { return cached }
+        let result = ImageStyler.apply(style, to: originalImage)
+        _cachedStyled = result
+        return result
     }
 }
 
