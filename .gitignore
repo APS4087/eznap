@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode — user-specific, never commit
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode build products
+build/
+*.o
+*.d
+*.LinkFileList
+
+# Swift Package Manager
+.build/
+.swiftpm/
+*.resolved
+
+# Credentials / secrets
+*.pem
+*.key
+*.p12
+*.cer
+*.mobileprovision
+.env
+.env.*
+secrets.json
+AuthKey_*.p8
+
+# Editor
+.idea/
+*.swp
+*~
